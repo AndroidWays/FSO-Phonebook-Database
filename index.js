@@ -8,6 +8,8 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 const url = process.env.MONGODB_URI;
 
+console.log('Connecting to MongoDB at:', url);
+
 // Middleware setup
 app.use(cors());
 app.use(express.json());
@@ -36,7 +38,7 @@ const personSchema = new mongoose.Schema({
         required: true,
         validate: {
             validator: (value) => {
-                // Check if the number matches the pattern of having 2 or 3 digits, a hyphen, and then at least 5 digits
+                // Validate phone number format
                 return /^\d{2,3}-\d{5,}$/.test(value);
             },
             message: (props) =>
