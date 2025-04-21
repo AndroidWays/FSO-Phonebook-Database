@@ -1,6 +1,6 @@
 # FSO-Phonebook-database
 This repository contains the backend application for the part3 Phonebook Database deployed on Render.
-Link to the deployed Phonebook-backend application - https://fso-phonebook-database.onrender.com/
+Link to the deployed Phonebook-backend application - https://fso-phonebook-database-7jdl.onrender.com
 
 # Features
     REST API: Provides endpoints for managing phonebook entries.
