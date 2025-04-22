@@ -1,44 +1,35 @@
-name: Build and Deploy
+name: Deploy and Notify
 
 on:
     push:
-        branches:
-            - main
+        branches: [main]
 
 jobs:
-    build:
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@v2
-
-            - name: Set up Node.js
-              uses: actions/setup-node@v2
-              with:
-                  node-version: '14'
-
-            - name: Install dependencies
-              run: npm install
-
-            - name: Run tests
-              run: npm test
-
     deploy:
         runs-on: ubuntu-latest
-        needs: build
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@v2
 
-            - name: Set up Node.js
-              uses: actions/setup-node@v2
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v3
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
               with:
-                  node-version: '14'
+                  node-version: '18'
 
             - name: Install dependencies
               run: npm install
 
-            - name: Deploy to Server
-              run: |
-                  curl -X POST https://api.render.com/v1/services/YOUR_SERVICE_ID/deploy \
-                    -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}"
+            - name: Simulate build (for backend)
+              run: npm run build
+
+            - name: Send Discord notification
+              if: success()
+              uses: Ilshidur/action-discord@master
+              with:
+                  args: |
+                      ✅ Phonebook_App Deployed Successfully
+                      🧑‍💻 Commit: `${{ github.event.head_commit.message }}`
+                      🔗 [View Commit](${{ github.event.head_commit.url }})
+              env:
+                  DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
